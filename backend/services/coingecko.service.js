@@ -34,7 +34,15 @@ async function getCoinPrices(requestedAssets = ['BTC', 'ETH', 'SOL']) {
     const ids = Object.values(COIN_ID_MAP).map(c => c.id).join(',')
     const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&sparkline=false&price_change_percentage=24h`
 
-    const res = await axios.get(url, { timeout: 4000 })
+    const headers = {}
+    if (process.env.COINGECKO_API_KEY) {
+      headers['x-cg-demo-api-key'] = process.env.COINGECKO_API_KEY
+    }
+
+    const res = await axios.get(url, {
+      timeout: 4000,
+      headers
+    })
     if (res.data && Array.isArray(res.data) && res.data.length > 0) {
       cache = {
         timestamp: Date.now(),
