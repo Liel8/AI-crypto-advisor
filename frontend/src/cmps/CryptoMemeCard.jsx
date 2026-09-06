@@ -6,9 +6,8 @@ export function CryptoMemeCard({ meme, userVote, onVote, onNextMeme }) {
     <div className="dash-section-card" id="section-meme">
       <div className="card-top-bar">
         <div className="card-title-group">
-          <div className="card-section-icon icon-bg-meme">🎭</div>
           <div>
-            <h2 className="card-heading">Daily Crypto Meme</h2>
+            <h2 className="card-heading">Crypto Meme</h2>
             <span className="api-source-badge">Local Meme Collection • Dynamic</span>
           </div>
         </div>
@@ -40,16 +39,14 @@ export function CryptoMemeCard({ meme, userVote, onVote, onNextMeme }) {
             className="meme-next-btn"
             onClick={onNextMeme}
           >
-            <span>🎲</span>
             <span>Show Another Meme</span>
           </button>
         </div>
       </div>
 
       <VotingBar
-        prompt="😂 Did this meme brighten your trading day?"
+        prompt="Did this make you laugh?"
         userVote={userVote}
-        sectionName="meme"
         onVote={(vote) => onVote?.('meme', vote)}
       />
     </div>

@@ -1,5 +1,4 @@
 export const SET_DASHBOARD = 'SET_DASHBOARD'
-export const SET_COIN_PRICES = 'SET_COIN_PRICES'
 export const SET_MEME = 'SET_MEME'
 export const SET_AI_INSIGHT = 'SET_AI_INSIGHT'
 export const SET_AI_LOADING = 'SET_AI_LOADING'
@@ -31,21 +30,6 @@ export function dashboardReducer(state = initialState, action) {
         isAiLoading: action.isAiLoading
       }
 
-    case SET_COIN_PRICES:
-      if (!state.data) return state
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          sections: {
-            ...state.data.sections,
-            coins: {
-              ...state.data.sections.coins,
-              items: action.coins
-            }
-          }
-        }
-      }
     case SET_MEME:
       if (!state.data) return state
       return {

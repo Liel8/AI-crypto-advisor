@@ -1,8 +1,19 @@
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../store/user.actions.js'
-import { showSuccessMsg } from '../services/event-bus.service.js'
+import { ThemeToggle } from './ThemeToggle.jsx'
+
+function getUserInitials(name) {
+  if (!name || typeof name !== 'string') return 'IN'
+  const trimmed = name.trim()
+  if (!trimmed) return 'IN'
+  const parts = trimmed.split(/\s+/).filter(Boolean)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+  }
+  return trimmed.slice(0, Math.min(trimmed.length, 2)).toUpperCase()
+}
 
 export function AppHeader() {
   const user = useSelector(state => state.userModule.user)
@@ -13,53 +24,97 @@ export function AppHeader() {
 
   const handleLogout = async () => {
     await dispatch(logout())
-    showSuccessMsg('Logged out successfully')
     navigate('/auth')
   }
 
-  // If user is not logged in, do not render navigation tabs that let guests jump between protected screens
+  const brandDestination = user && hasCompletedOnboarding ? '/dashboard' : '/'
+  const displayName = user?.fullname || user?.username || 'Investor'
+  const initials = getUserInitials(displayName)
+
+  // Unauthenticated / guest state: brand on left, ThemeToggle on right
   if (!user) {
     return (
       <header className="app-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '1.2rem' }}>⚡</span>
-          <span style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.3px', color: '#38bdf8' }}>
-            CryptoPulse AI
-          </span>
-          <span className="brand-badge">ADVISOR</span>
+        <div className="header-container">
+          <div className="header-left">
+            <Link to={brandDestination} className="header-brand" aria-label="CryptoPulse AI Home">
+              <div className="brand-logo-badge" aria-hidden="true">
+                <span className="brand-logo-icon">⚡</span>
+              </div>
+              <span className="brand-logo-text">
+                CryptoPulse <span className="brand-accent">AI</span>
+              </span>
+            </Link>
+          </div>
+          <div className="header-center" />
+          <div className="header-right">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
     )
   }
 
+  // Authenticated state: brand on left, nav truly centered, utilities on right
   return (
     <header className="app-header">
-      <nav className="screen-switcher" aria-label="Application Screen Navigation">
-        {hasCompletedOnboarding && (
+      <div className="header-container">
+        <div className="header-left">
+          <Link to={brandDestination} className="header-brand" aria-label="CryptoPulse AI Home">
+            <div className="brand-logo-badge" aria-hidden="true">
+              <span className="brand-logo-icon">⚡</span>
+            </div>
+            <span className="brand-logo-text">
+              CryptoPulse <span className="brand-accent">AI</span>
+            </span>
+          </Link>
+        </div>
+
+        <nav className="header-nav header-center" aria-label="Main Navigation">
+          {hasCompletedOnboarding && (
+            <NavLink 
+              to="/dashboard" 
+              className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}
+            >
+              Dashboard
+            </NavLink>
+          )}
+
           <NavLink 
-            to="/dashboard" 
-            className={({ isActive }) => `screen-btn ${isActive ? 'active' : ''}`}
+            to="/onboarding" 
+            className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}
           >
-            <span>📊</span> Daily AI Dashboard
+            Preferences
           </NavLink>
-        )}
+        </nav>
 
-        <NavLink 
-          to="/onboarding" 
-          className={({ isActive }) => `screen-btn ${isActive ? 'active' : ''}`}
-        >
-          <span>🧭</span> {hasCompletedOnboarding ? 'Edit Preferences' : 'Onboarding Quiz'}
-        </NavLink>
+        <div className="header-right">
+          <ThemeToggle />
 
-        <button 
-          type="button" 
-          className="screen-btn" 
-          onClick={handleLogout}
-          title="Sign out of your account"
-        >
-          <span>🚪</span> Logout
-        </button>
-      </nav>
+          <div className="header-divider" aria-hidden="true" />
+
+          <div className="header-user-area">
+            <div className="user-avatar" aria-hidden="true" title={displayName}>
+              {initials}
+            </div>
+            <span className="user-name" title={displayName}>
+              {displayName}
+            </span>
+            <span className="user-dot-separator" aria-hidden="true">·</span>
+            <button 
+              type="button" 
+              className="btn-logout" 
+              onClick={handleLogout}
+              title="Sign out of your account"
+              aria-label="Logout"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
   )
 }
+
+

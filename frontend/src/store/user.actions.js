@@ -1,6 +1,6 @@
 import { authService } from '../services/auth.service.js'
 import { userService } from '../services/user.service.js'
-import { SET_USER, UPDATE_PREFERENCES } from './user.reducer.js'
+import { SET_USER } from './user.reducer.js'
 import { CLEAR_DASHBOARD } from './dashboard.reducer.js'
 
 export function login(credentials) {

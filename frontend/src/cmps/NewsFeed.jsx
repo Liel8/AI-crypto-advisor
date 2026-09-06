@@ -7,9 +7,8 @@ export function NewsFeed({ news = [], userVote, onVote }) {
     <div className="dash-section-card" id="section-news">
       <div className="card-top-bar">
         <div className="card-title-group">
-          <div className="card-section-icon icon-bg-news">📰</div>
           <div>
-            <h2 className="card-heading">Curated Market News</h2>
+            <h2 className="card-heading">Market News</h2>
             <span className="api-source-badge">Static News Digest</span>
           </div>
         </div>
@@ -23,9 +22,8 @@ export function NewsFeed({ news = [], userVote, onVote }) {
       </div>
 
       <VotingBar
-        prompt="📰 Was this news selection relevant to you?"
+        prompt="Was this news useful?"
         userVote={userVote}
-        sectionName="news"
         onVote={(vote) => onVote?.('news', vote)}
       />
     </div>

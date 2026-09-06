@@ -11,7 +11,7 @@ import { CoinList } from '../cmps/CoinList.jsx'
 import { NewsFeed } from '../cmps/NewsFeed.jsx'
 import { AiInsightCard } from '../cmps/AiInsightCard.jsx'
 import { CryptoMemeCard } from '../cmps/CryptoMemeCard.jsx'
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
+import { showErrorMsg } from '../services/event-bus.service.js'
 
 export function Dashboard() {
   const dispatch = useDispatch()
@@ -39,21 +39,26 @@ export function Dashboard() {
         showErrorMsg('CoinGecko prices temporarily unavailable')
         return
       }
-      showSuccessMsg('CoinGecko prices updated')
     } catch (err) {
       showErrorMsg('Failed to update CoinGecko prices')
     }
   }
 
   const handleRegenerateAi = async () => {
-    await dispatch(regenerateInsight(user?._id))
-    showSuccessMsg('Generated fresh personalized AI market insight')
+    const insight = await dispatch(regenerateInsight(user?._id))
+
+    if (!insight) {
+      showErrorMsg('Failed to generate AI insight')
+    }
   }
 
   const handleNextMeme = async () => {
-    const currentId = dashboard?.sections?.meme?.data?.id
-    await dispatch(fetchNextMeme(currentId))
-    showSuccessMsg('Loaded fresh crypto meme')
+    try {
+      const currentId = dashboard?.sections?.meme?.data?.id
+      await dispatch(fetchNextMeme(currentId))
+    } catch (err) {
+      showErrorMsg('Failed to load next meme')
+    }
   }
 
   const handleVote = (section, vote) => {
@@ -72,7 +77,8 @@ export function Dashboard() {
   }
 
   const sections = dashboard?.sections || {}
-  const personaBadge = user?.preferences?.personaBadge || dashboard?.personaBadge || '💎 HODLer'
+  const rawPersona = user?.preferences?.persona || user?.preferences?.personaBadge || dashboard?.personaBadge || 'HODLer'
+  const personaName = rawPersona.replace(/^[^\w\s]+\s*/, '').trim() || 'HODLer'
   const assets = user?.preferences?.assets || dashboard?.assets || []
   const contentPreferences = user?.preferences?.content || dashboard?.content || ['Market News', 'Price Charts', 'AI Insights', 'Memes & Culture']
 
@@ -88,19 +94,13 @@ export function Dashboard() {
       <div className="dashboard-header">
         <div>
           <h1 className="dash-greeting">
-            Good afternoon, {user?.fullname || 'Investor'}!
+            Welcome, {user?.fullname || 'Investor'}!
           </h1>
-          <div className="dash-subtext">
-            <span>Tailored for your profile:</span>
-            <div className="active-profile-pills">
-              <span className="filter-pill">{personaBadge}</span>
-              {assets.map((asset) => (
-                <span key={asset} className="filter-pill">🪙 {asset}</span>
-              ))}
-              {contentPreferences.map((c) => (
-                <span key={c} className="filter-pill" style={{ opacity: 0.85 }}>📌 {c}</span>
-              ))}
-            </div>
+          <div className="active-profile-pills">
+            <span className="filter-pill persona-pill">{personaName}</span>
+            {assets.map((asset) => (
+              <span key={asset} className="filter-pill">{asset}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@ export function Dashboard() {
           <AiInsightCard
             insight={sections.aiInsight?.data}
             isLoading={isAiLoading || !sections.aiInsight?.data}
-            persona={personaBadge}
+            persona={personaName}
             userVote={sections.aiInsight?.userVote}
             onVote={handleVote}
             onRegenerate={handleRegenerateAi}

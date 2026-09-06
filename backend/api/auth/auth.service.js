@@ -24,11 +24,17 @@ async function login(email, password) {
   return miniUser
 }
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+
 async function signup({ fullname, email, password }) {
   logger.info(`auth.service - signup for email: ${email}`)
 
   if (!email || !password || !fullname) {
     throw new Error('All fields are required')
+  }
+
+  if (!PASSWORD_REGEX.test(password)) {
+    throw new Error('Password must be at least 8 characters and include uppercase, lowercase, and a number')
   }
 
   const existingUser = await userService.getByEmail(email)

@@ -7,9 +7,8 @@ export function CoinList({ coins = [], userVote, onVote, onRefresh }) {
     <div className="dash-section-card" id="section-prices">
       <div className="card-top-bar">
         <div className="card-title-group">
-          <div className="card-section-icon icon-bg-crypto">📈</div>
           <div>
-            <h2 className="card-heading">Curated Coin Prices</h2>
+            <h2 className="card-heading">Coin Prices</h2>
             <span className="api-source-badge">CoinGecko API • Market Data</span>
           </div>
         </div>
@@ -30,9 +29,8 @@ export function CoinList({ coins = [], userVote, onVote, onRefresh }) {
       </div>
 
       <VotingBar
-        prompt="🎯 Was this coin selection relevant to you?"
+        prompt="Was this market snapshot useful?"
         userVote={userVote}
-        sectionName="coins"
         onVote={(vote) => onVote?.('coins', vote)}
       />
     </div>

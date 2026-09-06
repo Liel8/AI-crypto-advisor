@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-export function VotingBar({ prompt, userVote = null, onVote, sectionName = 'section' }) {
+export function VotingBar({ prompt, userVote = null, onVote }) {
   const [activeVote, setActiveVote] = useState(userVote || null)
 
   useEffect(() => {

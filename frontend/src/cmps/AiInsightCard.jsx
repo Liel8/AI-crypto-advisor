@@ -20,14 +20,13 @@ export function AiInsightCard({ insight, isLoading = false, persona, userVote, o
     <div className="dash-section-card" id="section-ai">
       <div className="card-top-bar">
         <div className="card-title-group">
-          <div className="card-section-icon icon-bg-ai">🧠</div>
           <div>
-            <h2 className="card-heading">AI Insight of the Day</h2>
+            <h2 className="card-heading">AI Insight</h2>
             <span className="api-source-badge">Hugging Face Inference API</span>
           </div>
         </div>
         <span className="ai-sentiment-badge">
-          {data?.sentiment || (isBusy ? '⚡ Generating AI Insight...' : '🧠 AI Market Perspective')}
+          {data?.sentiment || (isBusy ? 'Generating AI Insight...' : 'AI Market Perspective')}
         </span>
       </div>
 
@@ -52,15 +51,13 @@ export function AiInsightCard({ insight, isLoading = false, persona, userVote, o
           disabled={isBusy}
           onClick={handleRegenerate}
         >
-          <span>{isBusy ? '⚡' : '🔄'}</span>
-          <span>{isBusy ? 'Querying Hugging Face...' : 'Regenerate AI Insight'}</span>
+          <span>{isBusy ? 'Querying Hugging Face...' : 'Regenerate Insight'}</span>
         </button>
       </div>
 
       <VotingBar
-        prompt="🤖 Was today's AI insight helpful & relevant?"
+        prompt="Was this insight useful?"
         userVote={userVote}
-        sectionName="aiInsight"
         onVote={(vote) => onVote?.('aiInsight', vote)}
       />
     </div>

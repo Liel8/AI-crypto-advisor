@@ -115,10 +115,11 @@ function _synthesizePersonaInsight(persona, assets) {
     Advisory & Capital Allocation: Maintain sufficient liquid reserves in your primary wallet to handle network fees and minting opportunities. Focus on high-conviction communities and avoid overextending capital across highly speculative secondary-market activity.`
   } else if (persona === 'DeFi Yield Farmer') {
     text = `Protocol Dynamics & Liquidity Depth: For a DeFi Yield Farmer tracking ${assetList}, protocol security, borrowing demand, and liquidity depth are important factors when evaluating yield opportunities. Market changes can affect liquidity pools and fee-generation dynamics.
-    Capital Efficiency & Security: Regularly monitor your active pool positions for impermanent loss exposure and contract changes. Prioritize established protocols with transparent reserves and strong security practices over short-lived incentive programs.`
+      Capital Efficiency & Security: Regularly monitor your active pool positions for impermanent loss exposure and contract changes. Prioritize established protocols with transparent reserves and strong security practices over short-lived incentive programs.`
+  } else {
     // HODLer (Default)
     text = `Long-Term Perspective: As a long-term HODLer focused on ${assetList}, maintaining a clear investment thesis and a long time horizon is more important than reacting to short-term volatility. Crypto markets can experience significant price swings, so consistency and patience are important.
-    Strategic Discipline: Maintain a systematic accumulation strategy that fits your risk tolerance and keep strong custody practices. Avoid making emotional decisions based on short-term market movements and focus on the long-term role of the assets in your portfolio.`
+      Strategic Discipline: Maintain a systematic accumulation strategy that fits your risk tolerance and keep strong custody practices. Avoid making emotional decisions based on short-term market movements and focus on the long-term role of the assets in your portfolio.`
   }
 
   return {

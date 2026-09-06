@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppHeader } from './cmps/AppHeader.jsx'
+import { ScrollToTop } from './cmps/ScrollToTop.jsx'
 import { LoginSignup } from './pages/LoginSignup.jsx'
 import { Onboarding } from './pages/Onboarding.jsx'
 import { Dashboard } from './pages/Dashboard.jsx'
@@ -15,6 +16,7 @@ export function RootCmp() {
 
   return (
     <div className="app-container">
+      <ScrollToTop />
       <div className="ambient-glow"></div>
       
       {/* Header containing ONLY the centered tabs navigation for authenticated state */}
